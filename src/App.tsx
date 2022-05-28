@@ -34,7 +34,14 @@ function MemoForm(props: { ideas: Idea[] }) {
   });
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        alignContent: "center",
+        flexGrow: 1,
+      }}>
       <Button
         variant='contained'
         onClick={() => {
@@ -48,15 +55,22 @@ function MemoForm(props: { ideas: Idea[] }) {
               },
               { shouldFocus: true }
             );
-            // const length = ideas.fields.length;
-            // form.setFocus(`ideas.${length}.title`, { shouldSelect: true });
           });
         }}>
         Add an Idea
       </Button>
-      {ideas.fields.map((field, idx) => {
-        return <CardIdea field={field} idx={idx} form={form} />;
-      })}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          alignItems: "center",
+          alignContent: "center",
+        }}>
+        {ideas.fields.map((field, idx) => {
+          return <CardIdea field={field} idx={idx} form={form} />;
+        })}
+      </div>
     </div>
   );
 }
@@ -75,7 +89,14 @@ interface CardIdeaProps {
 }
 function CardIdea(props: CardIdeaProps) {
   return (
-    <Card variant='outlined' id={props.field.key}>
+    <Card
+      variant='outlined'
+      id={props.field.key}
+      style={{
+        width: 150,
+        height: 150,
+        margin: 10,
+      }}>
       <Controller
         render={({ field }) => {
           console.log({ field, propsField: props.field });
