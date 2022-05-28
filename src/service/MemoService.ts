@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-interface Idea {
+export interface Idea {
   id: string;
   created_date: string;
   title: string;
@@ -15,12 +15,14 @@ export class MemoService {
     });
   }
   get = async (): Promise<Idea[]> => {
+    return [{ id: "x", body: "", title: "", created_date: "date creation x" }];
     const result = await this.client.get("/ideas");
 
     return result.data;
   };
 
   getNew = async (): Promise<Pick<Idea, "id" | "created_date">> => {
+    return { id: "ff", created_date: "df" };
     const result = await this.client.get("/ideas/new");
 
     return result.data;
@@ -28,7 +30,7 @@ export class MemoService {
 
   updateIdea = async (idea: Omit<Idea, "created_date">): Promise<Idea> => {
     const data = idea;
-    const result = await this.client.post("/ideas/new", data);
+    const result = await this.client.post("/ideas/update", data);
     return result.data;
   };
 
