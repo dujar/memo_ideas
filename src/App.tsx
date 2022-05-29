@@ -1,4 +1,10 @@
-import { Button, Card, CardContent, TextField } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  LinearProgress,
+  TextField,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   Controller,
@@ -12,7 +18,7 @@ import type { Idea } from "./service";
 import { MemoService } from "./service";
 import { isEmpty } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { styled } from "@mui/system";
+import { Box, styled } from "@mui/system";
 
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -45,7 +51,6 @@ function MemoForm(props: { ideas: Idea[] }) {
         flexDirection: "column",
         alignItems: "center",
         alignContent: "center",
-        // flexGrow: 1,
       }}>
       <Button
         variant='contained'
@@ -80,8 +85,17 @@ function MemoForm(props: { ideas: Idea[] }) {
           overflowY: "scroll",
           width: "100%",
         }}>
+        {/* <Box sx={{ width: "100%" }}>{isSuccess && <LinearProgress />}</Box> */}
         {ideas.fields.map((field, idx) => {
-          return <CardIdea field={field} idx={idx} form={form} ideas={ideas} />;
+          return (
+            <CardIdea
+              key={field.key}
+              field={field}
+              idx={idx}
+              form={form}
+              ideas={ideas}
+            />
+          );
         })}
       </div>
     </div>
@@ -129,14 +143,10 @@ function CardIdea(props: CardIdeaProps) {
       <CardContent>
         <Controller
           render={({ field }) => {
-            console.log({
-              field,
-              propsField: props.field,
-              state: props.form.formState,
-            });
             const { ref, ...fieldProps } = field;
             return (
               <StyledTextField
+                key={props.field.key}
                 {...fieldProps}
                 label='title'
                 variant='standard'
@@ -164,6 +174,7 @@ function CardIdea(props: CardIdeaProps) {
             }
             return (
               <StyledTextField
+                key={props.field.key}
                 {...fieldProps}
                 label={label}
                 variant='standard'
