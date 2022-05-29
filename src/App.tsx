@@ -158,10 +158,14 @@ function CardIdea(props: CardIdeaProps) {
         <Controller
           render={({ field }) => {
             const { ref, ...fieldProps } = field;
+            let label = "body";
+            if (fieldProps.value && fieldProps.value.length < 15) {
+              label += ` ${fieldProps.value.length}`;
+            }
             return (
               <StyledTextField
                 {...fieldProps}
-                label='body'
+                label={label}
                 variant='standard'
                 inputRef={ref}
                 onBlur={() => {
