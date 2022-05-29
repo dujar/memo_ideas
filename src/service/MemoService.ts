@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { defaultsDeep } from "lodash";
+import { defaultsDeep, isEmpty } from "lodash";
 import moment from "moment";
 import { v4 as uuid } from "uuid";
 export interface Idea {
@@ -9,6 +9,10 @@ export interface Idea {
   body: string;
 }
 
+const getIdeas = () => {
+  const lIdeas = JSON.parse(localStorage.getItem("ideas") || "[]");
+  return Array.isArray(lIdeas) ? lIdeas : [lIdeas];
+};
 export class MemoService {
   private client: AxiosInstance;
   constructor() {
@@ -31,9 +35,9 @@ export class MemoService {
       return result.data;
     } catch {
       if (localStorage) {
-        const ideas = localStorage.getItem("ideas");
-        if (ideas) {
-          return JSON.parse(ideas);
+        const ideas = getIdeas();
+        if (!isEmpty(ideas)) {
+          return ideas;
         } else {
           localStorage.setItem("ideas", JSON.stringify(blankIdea));
         }
@@ -54,19 +58,9 @@ export class MemoService {
         created_date: moment().format("LLLL"),
       };
       if (localStorage) {
-        const ideas = localStorage.getItem("ideas");
-        if (ideas) {
-          const localIdeas = JSON.parse(ideas) || [];
-          console.log({ localIdeas });
-          localStorage.setItem(
-            "ideas",
-            JSON.stringify(localIdeas.concat(ideas))
-          );
-        } else {
-          localStorage.setItem("ideas", JSON.stringify(blankIdea));
-        }
+        const ideas = getIdeas();
+        localStorage.setItem("ideas", JSON.stringify(ideas.concat(blankIdea)));
       }
-
       return blankIdea;
     }
   };
@@ -78,23 +72,19 @@ export class MemoService {
       return result.data;
     } catch {
       if (localStorage) {
-        const ideas = localStorage.getItem("ideas");
-        if (ideas) {
-          const localIdeas = JSON.parse(ideas);
-          localStorage.setItem(
-            "ideas",
-            JSON.stringify(
-              localIdeas.map((lIdea: Idea) => {
-                if (idea.id !== lIdea.id) {
-                  return lIdea;
-                }
-                return defaultsDeep(idea, lIdea);
-              })
-            )
-          );
-        }
+        const ideas = getIdeas();
+        localStorage.setItem(
+          "ideas",
+          JSON.stringify(
+            ideas.map((lIdea: Idea) => {
+              if (idea.id !== lIdea.id) {
+                return lIdea;
+              }
+              return defaultsDeep(idea, lIdea);
+            })
+          )
+        );
       }
-
       return {} as Idea;
     }
   };
@@ -105,21 +95,18 @@ export class MemoService {
       return result.data;
     } catch {
       if (localStorage) {
-        const ideas = localStorage.getItem("ideas");
-        if (ideas) {
-          const localIdeas = JSON.parse(ideas);
-          localStorage.setItem(
-            "ideas",
-            JSON.stringify(
-              localIdeas.filter((lIdea: Idea) => {
-                if (idea.id !== lIdea.id) {
-                  return true;
-                }
-                return false;
-              })
-            )
-          );
-        }
+        const ideas = getIdeas();
+        localStorage.setItem(
+          "ideas",
+          JSON.stringify(
+            ideas.filter((lIdea: Idea) => {
+              if (idea.id !== lIdea.id) {
+                return true;
+              }
+              return false;
+            })
+          )
+        );
       }
 
       return true;

@@ -1,11 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  TextField,
-} from "@mui/material";
+import { Button, Card, CardContent, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   Controller,
@@ -22,7 +15,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { styled } from "@mui/system";
 
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { isDeepStrictEqual } from "util";
 
 const service = new MemoService();
 function App() {
